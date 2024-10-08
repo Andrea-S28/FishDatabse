@@ -131,3 +131,4 @@ log, model = train(model=model,
                    batch_size=batch_size,
                    trainloader=train_loader,
                    valloader = val_loader)
+
