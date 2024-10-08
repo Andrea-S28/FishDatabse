@@ -12,6 +12,3 @@ def get_fish(fish_id):
         fish_desc += desc + '\n'
         
     return fish_desc
-
-
-print(get_fish(29))
