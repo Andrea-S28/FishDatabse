@@ -48,14 +48,14 @@ val_dataset.dataset.transform = val_transforms
 #pre-trained model for image recognition
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = resnet18(weights=ResNet18_Weights.DEFAULT)
-model.fc = nn.Linear(in_features=512, out_features=3)
+model.fc = nn.Linear(in_features=512, out_features=36)
 model = model.to(DEVICE)
 
 for name, param in model.named_parameters():
     if 'fc' not in name:
         param.requires_grad_(False)
 
-summary(model, input_size=(3, 224, 224))
+# summary(model, input_size=(3, 224, 224))
 
 # Training inputs
 optimizer = optim.AdamW(params=model.parameters())
@@ -125,7 +125,7 @@ def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, va
 
 log, model = train(model=model,
                    device=DEVICE,
-                   epochs=2,
+                   epochs=5,
                    optimizer=optimizer,
                    loss_fn=loss_fn,
                    batch_size=batch_size,
