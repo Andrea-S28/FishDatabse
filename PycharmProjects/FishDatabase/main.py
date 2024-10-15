@@ -1,4 +1,6 @@
+import textwrap
 import pandas as pd
+
 
 def get_fish(fish_id):
     df = pd.read_csv('./Michigan_Fish_20240923.csv')
@@ -8,7 +10,7 @@ def get_fish(fish_id):
 
     fish_desc = ('Common Name: ' + fish_common_name + '\n' + 'Latin Name: ' + fish_latin_name + '\n')
 
-    for desc in fish_details.split('  '):
-        fish_desc += desc + '\n'
-        
+    new_text = textwrap.fill(fish_details, 60)
+    fish_desc += 'Description: ' + new_text
+
     return fish_desc
