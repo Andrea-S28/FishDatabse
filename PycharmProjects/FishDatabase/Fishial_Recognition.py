@@ -132,3 +132,17 @@ log, model = train(model=model,
                    trainloader=train_loader,
                    valloader = val_loader)
 
+image_path = ''
+image = Image.open(image_path)
+image = val_transforms(image).unsqueeze(0)
+
+model.eval()
+prediction = F.softmax(model(image), dim = 1)
+
+prediction = prediction.argmax()
+
+labels = []
+for i in range(1, 37):
+    labels.append(i)
+
+print(labels[prediction])
