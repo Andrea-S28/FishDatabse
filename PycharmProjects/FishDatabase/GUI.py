@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 import main as m
-import Users as user
+import Users as u
 
 
 def create_welcome_page():
@@ -35,6 +35,16 @@ def create_log_in_page():
     ]
     return sg.Window("Log In", layout)
 
+def create_create_account_page():
+    layout = [
+        [sg.Text("Enter your name!")],
+        [sg.Input(key='-INPUT-')],
+        [sg.Button("Create Account")],
+        [sg.Button("go to Log In")],
+        [sg.Button("Cancel")],
+        [sg.Text(key='-OUTPUT-')]
+    ]
+    return sg.Window("Create Account", layout)
 
 def create_user_page():
     layout = [
@@ -65,7 +75,7 @@ while True:
                 user_id = log_in_values["-INPUT-"]
 
                 try:
-                    user_info = user.find_user(user_id)
+                    user_info = u.find_user(user_id)
                     event = 'User'
                     log_in.close()
 
@@ -83,6 +93,29 @@ while True:
             event_user_page, values_user = user.read()
             if event_user_page == sg.WIN_CLOSED or event_user_page == "Cancel":
                 user.close()
+                break
+
+     # Create Account Page
+    if event == 'Create Account':
+        create_account = create_create_account_page()
+        while True:
+            event_create_account, values_create_account = create_account.read()
+            if event_create_account == sg.WIN_CLOSED or event_create_account == "Cancel":
+                create_account.close()
+                break
+
+            if event_create_account == "Create Account":
+                user_name = values_create_account["-INPUT-"]
+                if len(user_name) > 0:
+                    # make user
+                    user_info = u.add_user(str(user_name))
+                    create_account['-OUTPUT-'].update(user_info)
+                else:
+                    create_account['-OUTPUT-'].update("Please enter a valid name!")
+
+            if event_create_account == "go to Log In":
+                event = "Log In"
+                create_account.close()
                 break
 
     # Guest Page
