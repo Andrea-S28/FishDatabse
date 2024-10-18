@@ -16,6 +16,8 @@ from torchsummary import summary
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+from PIL import Image
+
 
 Path_to_data = "./fish_dataset"
 dataset = ImageFolder(Path_to_data)
@@ -125,24 +127,32 @@ def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, va
 
 log, model = train(model=model,
                    device=DEVICE,
-                   epochs=5,
+                   epochs=1,
                    optimizer=optimizer,
                    loss_fn=loss_fn,
                    batch_size=batch_size,
                    trainloader=train_loader,
                    valloader = val_loader)
 
-image_path = ''
-image = Image.open(image_path)
-image = val_transforms(image).unsqueeze(0)
+def prediction(image_path, model, transform, device):
 
-model.eval()
-prediction = F.softmax(model(image), dim = 1)
+    image = Image.open(image_path).convert('RGB')
 
-prediction = prediction.argmax()
+    image = transform(image).unsqueeze(0)
 
-labels = []
-for i in range(1, 37):
-    labels.append(i)
+    image = image.to(device)
 
-print(labels[prediction])
+    model.eval()
+
+    with torch.no_grad():
+        output = model(image)
+        probabilities = nn.functional.softmax(output, dim=1)
+        predicted_class = probabilities.argmax().item()
+
+    label = dataset.classes[predicted_class]
+
+    return label
+
+image_path = './test_bass.jpg'
+predicted_label = prediction(image_path, model, val_transforms, DEVICE)
+print(predicted_label)
