@@ -127,7 +127,7 @@ def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, va
 
 log, model = train(model=model,
                    device=DEVICE,
-                   epochs=1,
+                   epochs=5,
                    optimizer=optimizer,
                    loss_fn=loss_fn,
                    batch_size=batch_size,
