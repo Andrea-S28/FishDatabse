@@ -4,18 +4,14 @@ https://www.youtube.com/watch?v=QyN_1ep1J1E&t=22s
 '''
 import torch
 import torch.nn as nn
-from numpy.ma.core import append
 from torch import optim
 from torch.utils.data import Dataset, DataLoader
-from torch.xpu import device
-from torchvision import transforms
 from torchvision.models import resnet18, ResNet18_Weights
 from torchvision.datasets import ImageFolder
 from torchvision.transforms import Compose, Normalize, RandomHorizontalFlip, Resize, ToTensor
 from torchsummary import summary
 import numpy as np
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 from PIL import Image
 
 
