@@ -3,6 +3,9 @@ import main as m
 import Users as u
 
 
+current_user_id = ''
+current_username = ''
+
 def create_welcome_page():
     layout = [
         [sg.Text("Welcome to Fish Database!")],
@@ -11,7 +14,6 @@ def create_welcome_page():
         [sg.Button("Guest")]
     ]
     return sg.Window("Welcome", layout)
-
 
 def create_guest_page():
     layout = [
@@ -23,7 +25,6 @@ def create_guest_page():
         [sg.Text(key='-OUTPUT-')]
     ]
     return sg.Window("Guest Page", layout)
-
 
 def create_log_in_page():
     layout = [
@@ -48,8 +49,12 @@ def create_create_account_page():
 
 def create_user_page():
     layout = [
-        [sg.Text("Welcome User")],
-        [sg.Button("Cancel")]
+        [sg.Text("Welcome " + current_username )],
+        [sg.Text(key='-OUTPUT-')],
+        [sg.Image(key="-IMAGE-")],
+        [sg.FileBrowse("Choose Image", file_types=(("Image Files", "*.png"),)), sg.Button("Upload Fish")],
+        [sg.Button("Log Out")],
+        [sg.Button("Get Caught Fish History")]
     ]
     return sg.Window("User", layout)
 
@@ -74,13 +79,14 @@ while True:
             if event_log_in_page == "Log In":
                 user_id = log_in_values["-INPUT-"]
 
-                try:
-                    user_info = u.find_user(user_id)
+                if not u.find_user_exist(user_id):
+                    log_in['-OUTPUT-'].update("Could not find user. Please try again or create an account")
+
+                else:
+                    current_user_id = user_id
+                    current_username = u.find_username(user_id)
                     event = 'User'
                     log_in.close()
-
-                except IndexError as e:
-                    log_in['-OUTPUT-'].update("Could not find user. Please try again or create an account")
 
         # while true -> log in with userID
         # if successful bring to user Page
@@ -89,11 +95,16 @@ while True:
     # User Page
     if event == 'User':
         user = create_user_page()
+
         while True:
             event_user_page, values_user = user.read()
-            if event_user_page == sg.WIN_CLOSED or event_user_page == "Cancel":
+            if event_user_page == sg.WIN_CLOSED or event_user_page == "Log Out":
+                current_user_id = ''
+                current_username = ''
                 user.close()
                 break
+
+
 
      # Create Account Page
     if event == 'Create Account':
