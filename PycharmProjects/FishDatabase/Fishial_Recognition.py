@@ -16,6 +16,8 @@ from torchsummary import summary
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+from PIL import Image
+
 
 Path_to_data = "./fish_dataset"
 dataset = ImageFolder(Path_to_data)
@@ -37,7 +39,7 @@ val_transforms = Compose([
 ])
 
 # splits data into train and validate sizes
-train_samples, test_samples = int(.6 * len(dataset)), len(dataset) - int(.6 * len(dataset))
+train_samples, test_samples = int(.7 * len(dataset)), len(dataset) - int(.7 * len(dataset))
 # takes both samples and randomly sorts them
 train_dataset, val_dataset = torch.utils.data.random_split(dataset, lengths=[train_samples, test_samples])
 # makes sure each image is transformed to preset
@@ -114,10 +116,10 @@ def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, va
         log_training['validation loss'].append(valid_loss_mean)
         log_training['validation accuracy'].append(valid_acc_mean)
 
-        print(f'Training Loss: {training_loss_mean}')
-        print(f'Training Accuracy: {training_acc_mean}')
-        print(f'Validation Loss: {valid_loss_mean}')
-        print(f'Validation Accuracy: {valid_acc_mean}')
+        print(f'Training Loss: {training_loss_mean:.2f}')
+        print(f'Training Accuracy: {training_acc_mean:.2f}')
+        print(f'Validation Loss: {valid_loss_mean:.2f}')
+        print(f'Validation Accuracy: {valid_acc_mean:.2f}')
 
     return log_training, model
 
@@ -132,17 +134,25 @@ log, model = train(model=model,
                    trainloader=train_loader,
                    valloader = val_loader)
 
-image_path = ''
-image = Image.open(image_path)
-image = val_transforms(image).unsqueeze(0)
+def prediction(image_path, model, transform, device):
 
-model.eval()
-prediction = F.softmax(model(image), dim = 1)
+    image = Image.open(image_path).convert('RGB')
 
-prediction = prediction.argmax()
+    image = transform(image).unsqueeze(0)
 
-labels = []
-for i in range(1, 37):
-    labels.append(i)
+    image = image.to(device)
 
-print(labels[prediction])
+    model.eval()
+
+    with torch.no_grad():
+        output = model(image)
+        probabilities = nn.functional.softmax(output, dim=1)
+        predicted_class = probabilities.argmax().item()
+
+    label = dataset.classes[predicted_class]
+
+    return label
+
+image_path = './test.jpg'
+predicted_label = prediction(image_path, model, val_transforms, DEVICE)
+print(predicted_label)
