@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-import main as m
+import Fish as f
 import Users as u
 
 
@@ -141,7 +141,7 @@ while True:
             # Get Fish by Fish ID
             elif event_guest_page == 'Ok':
                 fish_id = int((guest_values["-INPUT-"]))
-                fish_description = m.get_fish(fish_id)
+                fish_description = f.get_fish(fish_id)
                 guest['-OUTPUT-'].update(fish_description)
 
             # Get Fish by Photo

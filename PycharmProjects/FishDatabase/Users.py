@@ -1,7 +1,7 @@
 import pandas as pd
 import random
 import string
-import main as m
+import Fish as m
 
 
 def get_common_name(fish_id):
@@ -143,7 +143,7 @@ def test_find_user_caught_history_fish_found():
     print("test_find_user_caught_history_fish_found passed successfully!")
 
 def test_find_user_caught_history_no_fish_found():
-    user_id = 'JL125'
+    user_id = 'II142'
     expected_description = 'No caught fish have been caught yet!'
 
     actual_description = find_user_caught_history(user_id)
