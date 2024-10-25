@@ -18,7 +18,8 @@ def add_catch(fish_name, fish_latin_name, fish_details, fish_image = None):
 
     fish_file = fish_file.append(new_fish, ignore_index=True)
     fish_file.to_csv('./Michigan_Fish_20240923.csv', index=False)
-    return f"{fish_name} successfully added to your catches."
+    #return f"{fish_name} successfully added to your catches."
+    return int(fish_id)
 
 
 def get_fish(fish_id):
@@ -35,9 +36,24 @@ def get_fish(fish_id):
     return fish_desc
 
 
+def find_fish_exist(fish_id):
+    fish_dataset = pd.read_csv('./Michigan_Fish_20240923.csv')
+    if fish_id in fish_dataset['id'].values:
+        return True
+    return False
+
+
+def remove_fish(fish_id):
+    fish_dataset = pd.read_csv('./Michigan_Fish_20240923.csv')
+    fish_dataset = fish_dataset[fish_dataset['id'] != fish_id]
+    fish_dataset.to_csv('./Michigan_Fish_20240923.csv', index=False)
+
+    return not find_fish_exist(fish_id)
+
 def test_add_catch():
-    print("Testing with fish Marlin:")
-    add_catch("Marlin", "Clownfish", "Marlin is a orange saltwater clownfish with three stripes.")
+    fish_id = add_catch("Marlin", "Clownfish", "Marlin is a orange saltwater clownfish with three stripes.")
+    assert True == find_fish_exist(fish_id)
+    remove_fish(fish_id)
 
 
-#test_add_catch()
+test_add_catch()
