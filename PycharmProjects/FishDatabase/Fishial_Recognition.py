@@ -19,7 +19,7 @@ Path_to_data = "./fish_dataset"
 dataset = ImageFolder(Path_to_data)
 normalizer = Normalize(mean=[.485, .456, .406], std=[.229, .224, .225]) # avg of all images RGB
 
-# Changes images to all be one size
+  # Changes images to all be one size
 train_transforms = Compose([
     Resize((224, 224)),
     RandomHorizontalFlip(),
@@ -43,7 +43,7 @@ train_dataset.dataset.transform = train_transforms
 val_dataset.dataset.transform = val_transforms
 
 
-#pre-trained model for image recognition
+# pre-trained model for image recognition
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = resnet18(weights=ResNet18_Weights.DEFAULT)
 model.fc = nn.Linear(in_features=512, out_features=36)
@@ -64,6 +64,7 @@ batch_size = 128
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
+
 def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, valloader):
     log_training = {'epochs': [],
                     'training loss': [],
@@ -76,7 +77,7 @@ def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, va
         training_losses, training_accuracies = [], []
         validation_losses, validation_accuracy = [], []
 
-        #training data
+        # training data
         for image, label in tqdm(trainloader):
             image, label = image.to(DEVICE), label.to(DEVICE)
             optimizer.zero_grad()
@@ -90,8 +91,7 @@ def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, va
             loss.backward()
             optimizer.step()
 
-
-        #validation data
+        # validation data
         for image, label in tqdm(valloader):
             image, label = image.to(DEVICE), label.to(DEVICE)
             with torch.no_grad():
@@ -119,11 +119,9 @@ def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, va
 
     return log_training, model
 
-
-
 log, model = train(model=model,
                    device=DEVICE,
-                   epochs=5,
+                   epochs=1,
                    optimizer=optimizer,
                    loss_fn=loss_fn,
                    batch_size=batch_size,
@@ -131,6 +129,7 @@ log, model = train(model=model,
                    valloader = val_loader)
 
 def prediction(image_path, model, transform, device):
+
 
     image = Image.open(image_path).convert('RGB')
 
@@ -148,6 +147,7 @@ def prediction(image_path, model, transform, device):
     label = dataset.classes[predicted_class]
 
     return label
+
 
 image_path = './test.jpg'
 predicted_label = prediction(image_path, model, val_transforms, DEVICE)
