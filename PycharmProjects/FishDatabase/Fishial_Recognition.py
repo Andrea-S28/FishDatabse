@@ -126,7 +126,7 @@ log, model = train(model=model,
                    loss_fn=loss_fn,
                    batch_size=batch_size,
                    trainloader=train_loader,
-                   valloader = val_loader)
+                   valloader=val_loader)
 
 def prediction(image_path, model, transform, device):
 
