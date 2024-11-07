@@ -29,10 +29,10 @@ val_transforms = Compose([
     ToTensor(),
     normalizer
 ])
-def prediction(image_path, model, transform, device):
+def prediction(image_path):
     image = Image.open(image_path).convert('RGB')
-    image = transform(image).unsqueeze(0)
-    image = image.to(device)
+    image = val_transforms(image).unsqueeze(0)
+    image = image.to(DEVICE)
     model.eval()
     with torch.no_grad():
         output = model(image)
@@ -40,7 +40,3 @@ def prediction(image_path, model, transform, device):
         predicted_class = probabilities.argmax().item()
     label = dataset.classes[predicted_class]
     return label
-
-image_path = './test.jpg'
-predicted_label = prediction(image_path, model, val_transforms, DEVICE)
-print(predicted_label)

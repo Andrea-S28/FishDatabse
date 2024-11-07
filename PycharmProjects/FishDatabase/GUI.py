@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import Fish as f
 import Users as u
+import prediction as p
 
 
 current_user_id = ''
@@ -123,7 +124,6 @@ while True:
                 user.close()
                 break
 
-
     # Guest Page
     if event == "Guest":
         guest = create_guest_page()
@@ -144,7 +144,12 @@ while True:
                 filename = guest_values["Choose Image"]
                 if filename:
                     try:
-                        guest['-OUTPUT-'].update(filename)
+                        # image_path = '/Users/andi/Desktop/CIS350 - Intro to Soft Eng/FishDatabse/PycharmProjects/FishDatabase/La.jpeg'
+                        predicted_label = p.prediction(filename)
+                        guest['-OUTPUT-'].update(predicted_label)
+                        fish_id = int(predicted_label)
+                        fish_description = f.get_fish(fish_id)
+                        guest['-OUTPUT-'].update(fish_description)
                         # prints file path of image.. this needs to get sent off to Fishial_recognition for processing
 
                         # Process needs to send back FISH ID
