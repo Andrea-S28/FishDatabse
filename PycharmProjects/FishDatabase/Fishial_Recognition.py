@@ -9,17 +9,15 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision.models import resnet18, ResNet18_Weights
 from torchvision.datasets import ImageFolder
 from torchvision.transforms import Compose, Normalize, RandomHorizontalFlip, Resize, ToTensor
-from torchsummary import summary
 import numpy as np
 from tqdm import tqdm
-from PIL import Image
 
 
 Path_to_data = "./fish_dataset"
 dataset = ImageFolder(Path_to_data)
 normalizer = Normalize(mean=[.485, .456, .406], std=[.229, .224, .225]) # avg of all images RGB
 
-  # Changes images to all be one size
+# Changes images to all be one size
 train_transforms = Compose([
     Resize((224, 224)),
     RandomHorizontalFlip(),
@@ -116,39 +114,18 @@ def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, va
         print(f'Training Accuracy: {training_acc_mean:.2f}')
         print(f'Validation Loss: {valid_loss_mean:.2f}')
         print(f'Validation Accuracy: {valid_acc_mean:.2f}')
+    # Save the model
+    model_save_path = "./fish_model.pth"
+    torch.save(model.state_dict(), model_save_path)
+    print(f"Model saved to {model_save_path}")
 
     return log_training, model
 
 log, model = train(model=model,
                    device=DEVICE,
-                   epochs=1,
+                   epochs=5,
                    optimizer=optimizer,
                    loss_fn=loss_fn,
                    batch_size=batch_size,
                    trainloader=train_loader,
                    valloader=val_loader)
-
-def prediction(image_path, model, transform, device):
-
-
-    image = Image.open(image_path).convert('RGB')
-
-    image = transform(image).unsqueeze(0)
-
-    image = image.to(device)
-
-    model.eval()
-
-    with torch.no_grad():
-        output = model(image)
-        probabilities = nn.functional.softmax(output, dim=1)
-        predicted_class = probabilities.argmax().item()
-
-    label = dataset.classes[predicted_class]
-
-    return label
-
-
-image_path = './test.jpg'
-predicted_label = prediction(image_path, model, val_transforms, DEVICE)
-print(predicted_label)
