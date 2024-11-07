@@ -100,3 +100,4 @@ def add_caught_fish(user_id, fish_id):
     else:
         return "User not found"
 
+
