@@ -35,7 +35,6 @@ def get_fish(fish_id):
 
     return fish_desc
 
-
 def find_fish_exist(fish_id):
     fish_dataset = pd.read_csv('./Michigan_Fish_20240923.csv')
     if fish_id in fish_dataset['id'].values:
@@ -49,11 +48,3 @@ def remove_fish(fish_id):
     fish_dataset.to_csv('./Michigan_Fish_20240923.csv', index=False)
 
     return not find_fish_exist(fish_id)
-
-def test_add_catch():
-    fish_id = add_fish_info("Marlin", "Clownfish", "Marlin is a orange saltwater clownfish with three stripes.")
-    assert True == find_fish_exist(fish_id)
-    remove_fish(fish_id)
-
-
-test_add_catch()
