@@ -58,11 +58,13 @@ def remove_user(user_id):
 
     return not find_user_exist(user_id)
 
+
 def find_username(user_id):
     users_file = pd.read_csv('Users.csv')
     if find_user_exist(user_id):
         return users_file[users_file['UserID'] == user_id]['Names'].values[0]
     return 'Could not find user'
+
 
 def find_user_caught_history(user_id):
     users_file = pd.read_csv('Users.csv')
@@ -75,16 +77,30 @@ def find_user_caught_history(user_id):
         all_caught_fish = ''
         for fish_id in user_catches.split(','):
             fish_id = int(fish_id)
-            all_caught_fish += m.get_fish(fish_id) + '/n'
+            all_caught_fish += m.get_fish(fish_id)
         return all_caught_fish
 
     return 'Could not find user'
 
+
 def add_caught_fish(user_id, fish_id):
     if find_user_exist(user_id):
-        pass
+        users_file = pd.read_csv('Users.csv')
+        fish_database_file = pd.read_csv('./Michigan_Fish_20240923.csv')
+        if fish_id not in fish_database_file['id'].values:
+            return f"Fish ID {fish_id} not found."
 
-    return "User not found"
+        user_catches = users_file[users_file['UserID'] == user_id]['FishIDs'].values[0]
+        if pd.isnull(user_catches) or user_catches == '':
+            users_file[users_file['UserID'] == user_id]['FishIDs'].values[0] = ""
+            user_catches = str(fish_id)
+        else:
+            user_catches += ',' + str(fish_id)
+
+        users_file.loc[users_file['UserID'] == user_id, 'FishIDs'] = str(user_catches)
+        users_file.to_csv('Users.csv', index=False)
+    else:
+        return "User not found"
 
 
 
@@ -132,10 +148,10 @@ def test_create_user():
     print("test_create_user passed successfully!")
 
 def test_find_user_caught_history_fish_found():
-    user_id = 'JW912'
+    user_id = 'II142'
     expected_description = ''
-    expected_description += m.get_fish(18) + '/n'
-    expected_description += m.get_fish(12) + '/n'
+    expected_description += m.get_fish(18)
+    expected_description += m.get_fish(12)
 
     actual_description = find_user_caught_history(user_id)
 
@@ -173,6 +189,26 @@ def test_remove_user_user_not_in_database():
     print("test_remove_user_user_not_in_database passed successfully!")
 
 
+def test_add_catch_singular():
+    user_id = "II142"
+    fish_id = 18
+    add_caught_fish(user_id, fish_id)
+    expected = m.get_fish(18)
+    actual = find_user_caught_history(user_id)
+
+    assert actual == expected
+
+def test_add_catch_multiple():
+    user_id = "CL149"
+    #fish ids for CL149 "5,1,23,4"
+    expected = m.get_fish(5) + m.get_fish(1) + m.get_fish(23) + m.get_fish(4)
+    actual = find_user_caught_history(user_id)
+    assert actual == expected
+    add_caught_fish(user_id, 33)
+    assert actual != expected
+    expected += m.get_fish(33)
+    assert actual == expected
+
 # def test_find_user():
 #     print("Testing with user ID 1:")
 #     print(find_user("CL149"))  # Expected: Name: John Doe, Catches: Fish123
@@ -187,11 +223,11 @@ def test_remove_user_user_not_in_database():
 
 
 
-test_create_user()
-test_find_username_success()
-test_find_username_failure()
-test_find_user_caught_history_fish_found()
-test_find_user_caught_history_no_fish_found()
-test_find_user_caught_history_user_not_found()
-test_remove_user_user_in_database()
-test_remove_user_user_not_in_database()
+# test_create_user()
+# test_find_username_success()
+# test_find_username_failure()
+# test_find_user_caught_history_fish_found()
+# test_find_user_caught_history_no_fish_found()
+# test_find_user_caught_history_user_not_found()
+# test_remove_user_user_in_database()
+# test_remove_user_user_not_in_database()

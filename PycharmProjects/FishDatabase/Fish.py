@@ -4,7 +4,7 @@ import random
 import string
 
 
-def add_catch(fish_name, fish_latin_name, fish_details, fish_image = None):
+def add_fish_info(fish_name, fish_latin_name, fish_details, fish_image = None):
     fish_file = pd.read_csv('./Michigan_Fish_20240923.csv')
     fish_id = ''.join(random.choice(string.digits) for i in range(3))
 
@@ -30,8 +30,8 @@ def get_fish(fish_id):
 
     fish_desc = ('Common Name: ' + fish_common_name + '\n' + 'Latin Name: ' + fish_latin_name + '\n')
 
-    new_text = textwrap.fill(fish_details, 60)
-    fish_desc += 'Description: ' + new_text
+    #new_text = textwrap.fill(fish_details, 60)
+    #fish_desc += 'Description: ' + new_text
 
     return fish_desc
 
@@ -51,7 +51,7 @@ def remove_fish(fish_id):
     return not find_fish_exist(fish_id)
 
 def test_add_catch():
-    fish_id = add_catch("Marlin", "Clownfish", "Marlin is a orange saltwater clownfish with three stripes.")
+    fish_id = add_fish_info("Marlin", "Clownfish", "Marlin is a orange saltwater clownfish with three stripes.")
     assert True == find_fish_exist(fish_id)
     remove_fish(fish_id)
 
