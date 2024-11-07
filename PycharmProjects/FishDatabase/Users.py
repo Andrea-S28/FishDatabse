@@ -148,7 +148,7 @@ def test_create_user():
     print("test_create_user passed successfully!")
 
 def test_find_user_caught_history_fish_found():
-    user_id = 'II142'
+    user_id = 'JW912'
     expected_description = ''
     expected_description += m.get_fish(18)
     expected_description += m.get_fish(12)
