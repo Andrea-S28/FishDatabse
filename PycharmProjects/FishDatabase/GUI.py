@@ -67,46 +67,7 @@ while True:
     if event == sg.WIN_CLOSED:
         break
 
-    # Log In Page
-    if event == "Log In":
-        log_in = create_log_in_page()
-        while True:
-            event_log_in_page, log_in_values = log_in.read()
-            if event_log_in_page == sg.WIN_CLOSED or event_log_in_page == "Cancel":
-                log_in.close()
-                break
-
-            if event_log_in_page == "Log In":
-                user_id = log_in_values["-INPUT-"]
-
-                if not u.find_user_exist(user_id):
-                    log_in['-OUTPUT-'].update("Could not find user. Please try again or create an account")
-
-                else:
-                    current_user_id = user_id
-                    current_username = u.find_username(user_id)
-                    event = 'User'
-                    log_in.close()
-
-        # while true -> log in with userID
-        # if successful bring to user Page
-        # if not, prompt to try again or create account
-
-    # User Page
-    if event == 'User':
-        user = create_user_page()
-
-        while True:
-            event_user_page, values_user = user.read()
-            if event_user_page == sg.WIN_CLOSED or event_user_page == "Log Out":
-                current_user_id = ''
-                current_username = ''
-                user.close()
-                break
-
-
-
-     # Create Account Page
+    # Create Account Page
     if event == 'Create Account':
         create_account = create_create_account_page()
         while True:
@@ -128,6 +89,40 @@ while True:
                 event = "Log In"
                 create_account.close()
                 break
+
+    # Log In Page
+    if event == "Log In":
+        log_in = create_log_in_page()
+        while True:
+            event_log_in_page, log_in_values = log_in.read()
+            if event_log_in_page == sg.WIN_CLOSED or event_log_in_page == "Cancel":
+                log_in.close()
+                break
+
+            if event_log_in_page == "Log In":
+                user_id = log_in_values["-INPUT-"]
+
+                if not u.find_user_exist(user_id):
+                    log_in['-OUTPUT-'].update("Could not find user. Please try again or create an account")
+
+                else:
+                    current_user_id = user_id
+                    current_username = u.find_username(user_id)
+                    event = 'User'
+                    log_in.close()
+
+    # User Page
+    if event == 'User':
+        user = create_user_page()
+
+        while True:
+            event_user_page, values_user = user.read()
+            if event_user_page == sg.WIN_CLOSED or event_user_page == "Log Out":
+                current_user_id = ''
+                current_username = ''
+                user.close()
+                break
+
 
     # Guest Page
     if event == "Guest":
