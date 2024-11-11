@@ -1,6 +1,7 @@
 from PycharmProjects.FishDatabase import Fish as fish
 from PycharmProjects.FishDatabase import Users as user
 
+
 def test_find_username_success():
     user_id = 'CB363'
     expected_username = 'Carmen Towns'
@@ -83,4 +84,11 @@ def test_add_catch_multiple():
     expected += fish.get_fish(33)
     assert actual == expected
 
-
+test_find_username_success()
+test_find_username_failure()
+test_create_user()
+test_find_user_caught_history_fish_found()
+test_find_user_caught_history_no_fish_found()
+test_find_user_caught_history_user_not_found()
+test_remove_user_user_in_database()
+test_remove_user_user_not_in_database()
