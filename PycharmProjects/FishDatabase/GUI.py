@@ -124,6 +124,27 @@ while True:
                 user.close()
                 break
 
+            # Upload Fish
+            elif event_user_page == "Upload Fish":
+                filename = values_user["Choose Image"]
+                if filename:
+                    try:
+                        predicted_label = p.prediction(filename)
+                        user['-OUTPUT-'].update(predicted_label)
+                        fish_id = int(predicted_label)
+                        fish_description = f.get_fish(fish_id)
+                        user['-OUTPUT-'].update(fish_description)
+                    except Exception as e:
+                        sg.popup_error(f"Error loading image: {e}")
+
+            # Get Caught Fish History
+            elif event_user_page == "Get Caught Fish History":
+                caught_history = u.find_user_caught_history(current_user_id)
+                user['-OUTPUT-'].update(caught_history)
+
+            #add catch to caught history
+            #remove catch from caught history
+
     # Guest Page
     if event == "Guest":
         guest = create_guest_page()
@@ -144,23 +165,11 @@ while True:
                 filename = guest_values["Choose Image"]
                 if filename:
                     try:
-                        # image_path = '/Users/andi/Desktop/CIS350 - Intro to Soft Eng/FishDatabse/PycharmProjects/FishDatabase/La.jpeg'
                         predicted_label = p.prediction(filename)
                         guest['-OUTPUT-'].update(predicted_label)
                         fish_id = int(predicted_label)
                         fish_description = f.get_fish(fish_id)
                         guest['-OUTPUT-'].update(fish_description)
-                        # prints file path of image.. this needs to get sent off to Fishial_recognition for processing
-
-                        # Process needs to send back FISH ID
-                        # Fish ID needs to be sent to GetFish Func to return data on uploaded fish
-                        # OR
-                        # Process needs to find information on fish and send back fish description
-
-                        # save Fish Id to User if User is logged in
-
-                        # If no fish found
-                        # Print Error message
                     except Exception as e:
                         sg.popup_error(f"Error loading image: {e}")
 
