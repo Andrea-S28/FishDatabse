@@ -51,11 +51,14 @@ def create_create_account_page():
 def create_user_page():
     layout = [
         [sg.Text("Welcome " + current_username )],
+        [sg.Input(key='-INPUT-')],
         [sg.Text(key='-OUTPUT-')],
         [sg.Image(key="-IMAGE-")],
         [sg.FileBrowse("Choose Image", file_types=(("Image Files", "*.png"),)), sg.Button("Upload Fish")],
         [sg.Button("Log Out")],
-        [sg.Button("Get Caught Fish History")]
+        [sg.Button("Get Caught History")],
+        [sg.Button("Add Catch to History")],
+        [sg.Button("Remove Catch from History")],
     ]
     return sg.Window("User", layout)
 
@@ -125,11 +128,12 @@ while True:
                 break
 
             # Upload Fish
-            elif event_user_page == "Upload Fish":
+            elif event_user_page == "Upload Fish" or event_user_page == "Add Catch to History":
                 filename = values_user["Choose Image"]
                 if filename:
                     try:
                         predicted_label = p.prediction(filename)
+
                         user['-OUTPUT-'].update(predicted_label)
                         fish_id = int(predicted_label)
                         fish_description = f.get_fish(fish_id)
@@ -138,7 +142,7 @@ while True:
                         sg.popup_error(f"Error loading image: {e}")
 
             # Get Caught Fish History
-            elif event_user_page == "Get Caught Fish History":
+            elif event_user_page == "Get Caught History":
                 caught_history = u.find_user_caught_history(current_user_id)
                 user['-OUTPUT-'].update(caught_history)
 
