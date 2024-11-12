@@ -20,7 +20,7 @@ def get_common_name(fish_id):
 
     # Get the common name of the selected fish
     fish_common_name = fish_database_file[fish_database_file['id'] == fish_id]['CommonName'].values[0]
-    return fish_common_name + '\n'
+    return str(fish_id)+": " + fish_common_name + '\n'
 
 
 def find_user_exist(user_id):
