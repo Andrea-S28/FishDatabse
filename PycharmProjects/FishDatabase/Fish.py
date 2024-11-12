@@ -19,7 +19,7 @@ def add_fish_info(fish_name, fish_latin_name, fish_details, fish_image = None):
     }
 
     fish_file = fish_file.append(new_fish, ignore_index=True)
-    fish_file.to_csv('./Michigan_Fish_20240923.csv', index=False)
+    fish_file.to_csv(fish_path, index=False)
     #return f"{fish_name} successfully added to your catches."
     return int(fish_id)
 
@@ -51,6 +51,6 @@ def remove_fish(fish_id):
     fish_path = os.path.join(os.path.dirname(__file__), 'Michigan_Fish_20240923.csv')
     fish_file = pd.read_csv(fish_path)
     fish_file = fish_file[fish_file['id'] != fish_id]
-    fish_file.to_csv('./Michigan_Fish_20240923.csv', index=False)
+    fish_file.to_csv(fish_path, index=False)
 
     return not find_fish_exist(fish_id)
