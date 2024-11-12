@@ -9,6 +9,7 @@ def test_find_username_success():
     assert returned_username == expected_username
     print("test_find_username_success passed successfully!")
 
+
 def test_find_username_failure():
     user_id = 'Fake_ID'
     expected_username = 'Could not find user'
@@ -16,22 +17,25 @@ def test_find_username_failure():
     assert returned_username == expected_username
     print("test_find_username_failure passed successfully!")
 
+
 def test_create_user():
     user_id = user.add_user("Peter Piper")
     assert True == user.find_user_exist(user_id)
     user.remove_user(user_id)
     print("test_create_user passed successfully!")
 
+
 def test_find_user_caught_history_fish_found():
     user_id = 'JW912'
     expected_description = ''
-    expected_description += fish.get_fish(18)
-    expected_description += fish.get_fish(12)
+    expected_description += user.get_common_name(18)
+    expected_description += user.get_common_name(12)
 
     actual_description = user.find_user_caught_history(user_id)
 
     assert expected_description == actual_description
     print("test_find_user_caught_history_fish_found passed successfully!")
+
 
 def test_find_user_caught_history_no_fish_found():
     user_id = 'II142'
@@ -42,6 +46,7 @@ def test_find_user_caught_history_no_fish_found():
     assert expected_description == actual_description
     print("test_find_user_caught_history_no_fish_found passed successfully!")
 
+
 def test_find_user_caught_history_user_not_found():
     user_id = 'Fake_Id'
     expected_description = 'Could not find user'
@@ -51,11 +56,13 @@ def test_find_user_caught_history_user_not_found():
     assert expected_description == actual_description
     print("test_find_user_caught_history_user_not_found passed successfully!")
 
+
 def test_remove_user_user_in_database():
     user_id = user.add_user("Peter Piper")
     user.remove_user(user_id)
     assert False == user.find_user_exist(user_id)
     print("test_remove_user_user_in_database passed successfully!")
+
 
 def test_remove_user_user_not_in_database():
     user_id = 'Fake_Id'
@@ -64,25 +71,31 @@ def test_remove_user_user_not_in_database():
     print("test_remove_user_user_not_in_database passed successfully!")
 
 
-def test_add_catch_singular():
-    user_id = "II142"
+def test_add_catch():
+    user_id = user.add_user("John Green")
     fish_id = 18
     user.add_caught_fish(user_id, fish_id)
-    expected = fish.get_fish(18)
+    expected = user.get_common_name(18)
     actual = user.find_user_caught_history(user_id)
 
     assert actual == expected
+    user.remove_user(user_id)
 
-def test_add_catch_multiple():
-    user_id = "CL149"
-    #fish ids for CL149 "5,1,23,4"
-    expected = fish.get_fish(5) + fish.get_fish(1) + fish.get_fish(23) + fish.get_fish(4)
+
+def test_remove_catch():
+    user_id = user.add_user("Earl Adams")
+    fish_id = 1
+    user.add_caught_fish(user_id, fish_id)
     actual = user.find_user_caught_history(user_id)
+    expected = user.get_common_name(fish_id)
     assert actual == expected
-    user.add_caught_fish(user_id, 33)
-    assert actual != expected
-    expected += fish.get_fish(33)
+
+    user.remove_catch(user_id, fish_id)
+    actual = user.find_user_caught_history(user_id)
+    expected = 'No caught fish have been caught yet!'
     assert actual == expected
+    user.remove_user(user_id)
+
 
 test_find_username_success()
 test_find_username_failure()
@@ -92,3 +105,4 @@ test_find_user_caught_history_no_fish_found()
 test_find_user_caught_history_user_not_found()
 test_remove_user_user_in_database()
 test_remove_user_user_not_in_database()
+test_add_catch()
