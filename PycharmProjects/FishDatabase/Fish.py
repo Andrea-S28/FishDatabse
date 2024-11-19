@@ -5,7 +5,7 @@ import string
 import os
 
 
-def add_fish_info(fish_name, fish_latin_name, fish_details, fish_image = None):
+def add_fish_info(fish_name, fish_latin_name, fish_details, fish_image = ''):
     fish_path = os.path.join(os.path.dirname(__file__), 'Michigan_Fish_20240923.csv')
     fish_file = pd.read_csv(fish_path)
     fish_id = ''.join(random.choice(string.digits) for i in range(3))
@@ -18,7 +18,7 @@ def add_fish_info(fish_name, fish_latin_name, fish_details, fish_image = None):
         'ImageURL': fish_image
     }
 
-    fish_file = fish_file.append(new_fish, ignore_index=True)
+    fish_file = fish_file._append(new_fish, ignore_index=True)
     fish_file.to_csv(fish_path, index=False)
     #return f"{fish_name} successfully added to your catches."
     return int(fish_id)

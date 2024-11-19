@@ -12,3 +12,6 @@ def test_remove_fish():
     assert True == f.find_fish_exist(fish_id)
     f.remove_fish(fish_id)
     assert False == f.find_fish_exist(fish_id)
+
+test_remove_fish()
+test_add_catch()
