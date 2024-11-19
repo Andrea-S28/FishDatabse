@@ -6,6 +6,7 @@ import prediction as p
 
 current_user_id = ''
 current_username = ''
+current_fish_id = ''
 
 def create_welcome_page():
     layout = [
@@ -18,11 +19,10 @@ def create_welcome_page():
 
 def create_guest_page():
     layout = [
-        [sg.Text("Enter fishID:")],
-        [sg.Input(key='-INPUT-')],
+        [sg.Text("Welcome to the guest page! Select an image of a fish to upload.")],
         [sg.Image(key="-IMAGE-")],
         [sg.FileBrowse("Choose Image", file_types=(("Image Files", "*.png"),)), sg.Button("Upload Fish")],
-        [sg.Button('Ok'), sg.Button('Cancel')],
+        [sg.Button('Cancel')],
         [sg.Text(key='-OUTPUT-')]
     ]
     return sg.Window("Guest Page", layout)
@@ -51,6 +51,7 @@ def create_create_account_page():
 def create_user_page():
     layout = [
         [sg.Text("Welcome " + current_username )],
+        [sg.Text("Enter fishID to remove from history:")],
         [sg.Input(key='-INPUT-')],
         [sg.Text(key='-OUTPUT-')],
         [sg.Image(key="-IMAGE-")],
@@ -124,30 +125,39 @@ while True:
             if event_user_page == sg.WIN_CLOSED or event_user_page == "Log Out":
                 current_user_id = ''
                 current_username = ''
+                current_fish_id = ''
                 user.close()
                 break
 
             # Upload Fish
-            elif event_user_page == "Upload Fish" or event_user_page == "Add Catch to History":
+            if event_user_page == "Upload Fish" or event_user_page == "Add Catch to History":
                 filename = values_user["Choose Image"]
                 if filename:
                     try:
                         predicted_label = p.prediction(filename)
 
                         user['-OUTPUT-'].update(predicted_label)
-                        fish_id = int(predicted_label)
-                        fish_description = f.get_fish(fish_id)
+                        current_fish_id = int(predicted_label)
+                        fish_description = f.get_fish(current_fish_id)
                         user['-OUTPUT-'].update(fish_description)
                     except Exception as e:
                         sg.popup_error(f"Error loading image: {e}")
 
             # Get Caught Fish History
-            elif event_user_page == "Get Caught History":
+            if event_user_page == "Get Caught History":
                 caught_history = u.find_user_caught_history(current_user_id)
                 user['-OUTPUT-'].update(caught_history)
 
             #add catch to caught history
+            if event_user_page == "Add Catch to History":
+                added = u.add_caught_fish(current_user_id, current_fish_id)
+                user['-OUTPUT-'].update(added)
+
             #remove catch from caught history
+            if event_user_page == "Remove Catch from History":
+                current_fish_id = values_user["-INPUT-"]
+                removed = u.remove_catch(current_user_id, current_fish_id)
+                user['-OUTPUT-'].update(removed)
 
     # Guest Page
     if event == "Guest":
@@ -158,14 +168,8 @@ while True:
                 guest.close()
                 break
 
-            # Get Fish by Fish ID
-            elif event_guest_page == 'Ok':
-                fish_id = int((guest_values["-INPUT-"]))
-                fish_description = f.get_fish(fish_id)
-                guest['-OUTPUT-'].update(fish_description)
-
             # Get Fish by Photo
-            elif event_guest_page == "Upload Fish":
+            if event_guest_page == "Upload Fish":
                 filename = guest_values["Choose Image"]
                 if filename:
                     try:

@@ -47,7 +47,7 @@ def add_user(user_name):
     }
 
     # Add the new user to the end of the Users file
-    users_file = users_file.append(new_user, ignore_index=True)
+    users_file = users_file._append(new_user, ignore_index=True)
     # Save the updated DataFrame back to the CSV file
     users_file.to_csv(user_path, index=False)
 
@@ -108,6 +108,7 @@ def add_caught_fish(user_id, fish_id):
 
         users_file.loc[users_file['UserID'] == user_id, 'FishIDs'] = str(user_catches)
         users_file.to_csv(user_path, index=False)
+        return f"Successfully added the fishID: {fish_id} to your history!"
     else:
         return "User not found"
 
@@ -118,6 +119,8 @@ def remove_catch(user_id, fish_id):
     user_index = users_file[users_file['UserID'] == user_id].index[0]
     current_fish_ids = users_file.at[user_index, 'FishIDs']
 
+    if pd.isnull(current_fish_ids) or current_fish_ids == '':
+        return 'You have no fish in your caught history yet!'
     fish_ids_list = current_fish_ids.split(',')
     if str(fish_id) in fish_ids_list:
         fish_ids_list.remove(str(fish_id))
@@ -125,3 +128,5 @@ def remove_catch(user_id, fish_id):
         updated_fish_ids = ','.join(fish_ids_list) if fish_ids_list else ''
         users_file.loc[users_file['UserID'] == user_id, 'FishIDs'] = updated_fish_ids
         users_file.to_csv(user_path, index=False)
+        return f'Successfully removed FishID:{fish_id} from your history!'
+    return f'Could not find FishID:{fish_id} in your history.'
