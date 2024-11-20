@@ -5,7 +5,7 @@ import string
 import os
 
 
-def add_fish_info(fish_name, fish_latin_name, fish_details, fish_image = None):
+def add_fish_info(fish_name, fish_latin_name, fish_details, fish_image = ''):
     fish_path = os.path.join(os.path.dirname(__file__), 'Michigan_Fish_20240923.csv')
     fish_file = pd.read_csv(fish_path)
     fish_id = ''.join(random.choice(string.digits) for i in range(3))
