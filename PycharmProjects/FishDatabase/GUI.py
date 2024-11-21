@@ -21,7 +21,7 @@ def create_guest_page():
     layout = [
         [sg.Text("Welcome to the guest page! Select an image of a fish to upload.")],
         [sg.Image(key="-IMAGE-")],
-        [sg.FileBrowse("Choose Image", file_types=(("Image Files", "*.png"),)), sg.Button("Upload Fish")],
+        [sg.FileBrowse("Choose Image", file_types=(("Image Files", "*.png;*.jpeg;*.jpg"),)), sg.Button("Upload Fish")],
         [sg.Button('Cancel')],
         [sg.Text(key='-OUTPUT-')]
     ]
@@ -55,7 +55,7 @@ def create_user_page():
         [sg.Input(key='-INPUT-')],
         [sg.Text(key='-OUTPUT-')],
         [sg.Image(key="-IMAGE-")],
-        [sg.FileBrowse("Choose Image", file_types=(("Image Files", "*.png"),)), sg.Button("Upload Fish")],
+        [sg.FileBrowse("Choose Image", file_types=(("Image Files", "*.png;*.jpeg;*.jpg"),)), sg.Button("Upload Fish")],
         [sg.Button("Log Out")],
         [sg.Button("Get Caught History")],
         [sg.Button("Add Catch to History")],
