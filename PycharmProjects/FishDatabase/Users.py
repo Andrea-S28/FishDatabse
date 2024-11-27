@@ -1,7 +1,6 @@
 import pandas as pd
 import random
 import string
-from PycharmProjects.FishDatabase import Fish as f
 import os
 
 
@@ -52,6 +51,7 @@ def add_user(user_name):
     users_file.to_csv(user_path, index=False)
 
     return user_id
+
 
 def remove_user(user_id):
     user_path = os.path.join(os.path.dirname(__file__), 'Users.csv')

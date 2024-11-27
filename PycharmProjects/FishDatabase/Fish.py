@@ -5,7 +5,7 @@ import string
 import os
 
 
-def add_fish_info(fish_name, fish_latin_name, fish_details, fish_image = ''):
+def add_fish_info(fish_name, fish_latin_name, fish_details, fish_image=''):
     fish_path = os.path.join(os.path.dirname(__file__), 'Michigan_Fish_20240923.csv')
     fish_file = pd.read_csv(fish_path)
     fish_id = ''.join(random.choice(string.digits) for i in range(3))
@@ -32,8 +32,8 @@ def get_fish(fish_id):
 
     fish_desc = ('Common Name: ' + fish_common_name + '\n' + 'Latin Name: ' + fish_latin_name + '\n')
 
-    #new_text = textwrap.fill(fish_details, 60)
-    #fish_desc += 'Description: ' + new_text
+    # new_text = textwrap.fill(fish_details, 60)
+    # fish_desc += 'Description: ' + new_text
 
     return fish_desc
 

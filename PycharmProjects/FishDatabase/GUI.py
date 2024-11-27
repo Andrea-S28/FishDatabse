@@ -8,6 +8,7 @@ current_user_id = ''
 current_username = ''
 current_fish_id = ''
 
+
 def create_welcome_page():
     layout = [
         [sg.Text("Welcome to Fish Database!")],
@@ -16,6 +17,7 @@ def create_welcome_page():
         [sg.Button("Guest")]
     ]
     return sg.Window("Welcome", layout)
+
 
 def create_guest_page():
     layout = [
@@ -27,6 +29,7 @@ def create_guest_page():
     ]
     return sg.Window("Guest Page", layout)
 
+
 def create_log_in_page():
     layout = [
         [sg.Text("Enter UserID")],
@@ -36,6 +39,7 @@ def create_log_in_page():
         [sg.Text(key='-OUTPUT-')]
     ]
     return sg.Window("Log In", layout)
+
 
 def create_create_account_page():
     layout = [
@@ -48,9 +52,10 @@ def create_create_account_page():
     ]
     return sg.Window("Create Account", layout)
 
+
 def create_user_page():
     layout = [
-        [sg.Text("Welcome " + current_username )],
+        [sg.Text("Welcome " + current_username)],
         [sg.Text("Enter fishID to remove from history:")],
         [sg.Input(key='-INPUT-')],
         [sg.Text(key='-OUTPUT-')],
@@ -148,12 +153,12 @@ while True:
                 caught_history = u.find_user_caught_history(current_user_id)
                 user['-OUTPUT-'].update(caught_history)
 
-            #add catch to caught history
+            # add catch to caught history
             if event_user_page == "Add Catch to History":
                 added = u.add_caught_fish(current_user_id, current_fish_id)
                 user['-OUTPUT-'].update(added)
 
-            #remove catch from caught history
+            # remove catch from caught history
             if event_user_page == "Remove Catch from History":
                 current_fish_id = values_user["-INPUT-"]
                 removed = u.remove_catch(current_user_id, current_fish_id)

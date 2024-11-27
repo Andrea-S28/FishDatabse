@@ -15,7 +15,7 @@ from tqdm import tqdm
 
 Path_to_data = "./fish_dataset"
 dataset = ImageFolder(Path_to_data)
-normalizer = Normalize(mean=[.485, .456, .406], std=[.229, .224, .225]) # avg of all images RGB
+normalizer = Normalize(mean=[.485, .456, .406], std=[.229, .224, .225])  # avg of all images RGB
 
 # Changes images to all be one size
 train_transforms = Compose([
@@ -120,6 +120,7 @@ def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, va
     print(f"Model saved to {model_save_path}")
 
     return log_training, model
+
 
 log, model = train(model=model,
                    device=DEVICE,
