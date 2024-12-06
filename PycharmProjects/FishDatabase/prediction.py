@@ -6,6 +6,12 @@ from torchvision.transforms import Compose, Normalize, RandomHorizontalFlip, Res
 from PIL import Image
 import os
 
+#
+# load_dataset()
+# This function loads the custom dataset “fish_dataset”
+# from the specified directory and ensures it exists and prepares it for use in training
+#
+
 
 def load_dataset():
     script_dir = os.path.dirname(os.path.abspath(__file__))  # Current Directory
@@ -15,12 +21,23 @@ def load_dataset():
 
     return ImageFolder(path_to_data)
 
+#
+# get _model_path()
+# This function gets the absolute path to the pre-trained model “fish_model.pth”,
+# used to load model without hardcoding path multiple times
+#
+
 
 def get_model_path():
     script_dir = os.path.dirname(os.path.abspath(__file__))  # Current Directory
     path_to_model = os.path.join(script_dir, "fish_model.pth")  # Adjust Path
     # model_load_path = "./fish_model.pth"
     return path_to_model
+
+#
+# load_model()
+# This function loads the pre-trained model and adjust it for our dataset and prepares it for evaluation
+#
 
 
 def load_model():
@@ -47,6 +64,11 @@ val_transforms = Compose([
     ToTensor(),
     normalizer
 ])
+
+#
+# prediction()
+# The predict function uses the trained model and a user input fish and makes a guess on fish’s species.
+#
 
 
 def prediction(image_path):

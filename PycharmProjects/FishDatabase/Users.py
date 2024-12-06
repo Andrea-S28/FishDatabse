@@ -3,6 +3,13 @@ import random
 import string
 import os
 
+#
+# get_common_name()
+# This function takes in a fish ID as the parameter.
+# It first checks to ensure that the ID is valid, then if it is,
+# it returns the common name of the fish matching that ID.
+#
+
 
 def get_common_name(fish_id):
     fish_database_file = os.path.join(os.path.dirname(__file__), 'Michigan_Fish_20240923.csv')
@@ -21,6 +28,12 @@ def get_common_name(fish_id):
     fish_common_name = fish_database_file[fish_database_file['id'] == fish_id]['CommonName'].values[0]
     return str(fish_id)+": " + fish_common_name + '\n'
 
+#
+# find_user_exist()
+# This function takes in a user id as the parameter. It checks the users file for the user ID.
+# If found it will return true, otherwise it returns false.
+#
+
 
 def find_user_exist(user_id):
     user_path = os.path.join(os.path.dirname(__file__), 'Users.csv')
@@ -28,6 +41,13 @@ def find_user_exist(user_id):
     if user_id in users_file['UserID'].values:
         return True
     return False
+
+#
+# add_user()
+# Using a name as the parameter, this function adds a new user to the users file.
+# The function adds the name to the file, generates an id, and begins a list for all of the user's catches.
+# Once the user has been added to the database, it returns the generated user ID.
+#
 
 
 def add_user(user_name):
@@ -52,6 +72,14 @@ def add_user(user_name):
 
     return user_id
 
+#
+# remove_user()
+#   find_user_exist
+# This function takes in a user id as the parameter.
+# It updates the users file to remove the data associated with that id.
+# The function find_user_exist is then called to ensure that the id was properly removed from the file.
+#
+
 
 def remove_user(user_id):
     user_path = os.path.join(os.path.dirname(__file__), 'Users.csv')
@@ -61,6 +89,15 @@ def remove_user(user_id):
 
     return not find_user_exist(user_id)
 
+#
+# find_username()
+#   Find_user_exist
+# This function uses the user id as the parameter.
+# It takes the user ID and, using the find_user_exist function, searches the users file for the data matching the id.
+# If the data is found, then the function returns the name of the user matching that ID,
+# otherwise, the function returns a message stating the user could not be found.
+#
+
 
 def find_username(user_id):
     user_path = os.path.join(os.path.dirname(__file__), 'Users.csv')
@@ -68,6 +105,15 @@ def find_username(user_id):
     if find_user_exist(user_id):
         return users_file[users_file['UserID'] == user_id]['Names'].values[0]
     return 'Could not find user'
+
+#
+# find_user_caught_history()
+#   Find_user_exist
+# This function takes the user ID as the parameter and uses the find_user_exist function to ensure the user ID is valid.
+# If valid, the function returns any of the fish caught by the user
+# If the user has no catches, the function returns a message stating that the user has not caught any fish yet.
+# If the ID is not found, then the function will return a message stating that the ID was not found in the file.
+#
 
 
 def find_user_caught_history(user_id):
@@ -86,6 +132,15 @@ def find_user_caught_history(user_id):
         return all_caught_fish
 
     return 'Could not find user'
+
+#
+# add_caught_fish()
+# Find_user_exist
+# This function will take in a user ID and a fish ID as the parameters.
+# It will first search for the user using the find_user_exist function.
+# If the user is found the function adds the fish matching the id to the user’s list of catches in the users file.
+# Otherwise, the function will return that the user was not found in the user’s file.
+#
 
 
 def add_caught_fish(user_id, fish_id):
@@ -111,6 +166,13 @@ def add_caught_fish(user_id, fish_id):
         return f"Successfully added the fishID: {fish_id} to your history!"
     else:
         return "User not found"
+
+#
+# remove_catch()
+# This function takes in a user ID and a Fish ID.
+# Upon successfully finding the user in the database and the fish ID in the user’s ‘FishIDs’,
+# it will remove the given Fish ID from that list.
+#
 
 
 def remove_catch(user_id, fish_id):

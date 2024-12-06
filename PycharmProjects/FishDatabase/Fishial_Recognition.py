@@ -62,6 +62,12 @@ batch_size = 128
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
+#
+# Train()
+# The train function is used to train and validate the model over a
+# specified amount of epochs using both the training and validation data.
+#
+
 
 def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, valloader):
     log_training = {'epochs': [],

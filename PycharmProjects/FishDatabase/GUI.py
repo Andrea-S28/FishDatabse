@@ -8,6 +8,12 @@ current_user_id = ''
 current_username = ''
 current_fish_id = ''
 
+#
+# create_welcome_page()
+# This function is used to create the layout for the welcome page.
+# It initializes the buttons to allow the users to click into the other pages.
+#
+
 
 def create_welcome_page():
     layout = [
@@ -17,6 +23,11 @@ def create_welcome_page():
         [sg.Button("Guest")]
     ]
     return sg.Window("Welcome", layout)
+
+#
+# create_guest_page()
+# This function is used to create the guest page. It creates the layout for the guest page.
+#
 
 
 def create_guest_page():
@@ -28,6 +39,12 @@ def create_guest_page():
         [sg.Text(key='-OUTPUT-')]
     ]
     return sg.Window("Guest Page", layout)
+
+#
+# create_log_in_page()
+# This function creates the login page.
+# It creates the layout as well as buttons to click into the user page after a successful login.
+#
 
 
 def create_log_in_page():
@@ -41,6 +58,12 @@ def create_log_in_page():
     return sg.Window("Log In", layout)
 
 
+#
+# create_create_account_page()
+# This function creates the create account page.
+# It sets up the layout as well as initializes the button to allow the user to click into the login page.
+#
+
 def create_create_account_page():
     layout = [
         [sg.Text("Enter your name!")],
@@ -51,6 +74,12 @@ def create_create_account_page():
         [sg.Text(key='-OUTPUT-')]
     ]
     return sg.Window("Create Account", layout)
+
+#
+# create_user_page()
+# This function is used to create the user page.
+# It sets up the layout of the page as well as initializes the buttons the user will use on this page.
+#
 
 
 def create_user_page():
