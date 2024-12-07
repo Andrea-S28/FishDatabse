@@ -1,3 +1,6 @@
 Document found bugs or issues here: 
 example MM/DD, issue description, fixed (yes/no)
 The CSV files are no longer linked to the rest of the project, fixed (yes)
+10/23, Cropping images to make accuracy > 60%, fixed (no)
+11/14, testing files unable to find dataset and model, fixed (yes)
+11/14, Gui only accepts png files, fixed (yes)

@@ -6,14 +6,13 @@ from torchvision.transforms import Compose, Normalize, RandomHorizontalFlip, Res
 from PIL import Image
 import os
 
-#
-# load_dataset()
-# This function loads the custom dataset “fish_dataset”
-# from the specified directory and ensures it exists and prepares it for use in training
-#
-
 
 def load_dataset():
+    """
+    load_dataset()
+    This function loads the custom dataset “fish_dataset”
+    from the specified directory and ensures it exists and prepares it for use in training
+    """
     script_dir = os.path.dirname(os.path.abspath(__file__))  # Current Directory
     path_to_data = os.path.join(script_dir, '../FishDatabase/fish_dataset')  # Adjust Path
     if not os.path.exists(path_to_data):
@@ -21,26 +20,24 @@ def load_dataset():
 
     return ImageFolder(path_to_data)
 
-#
-# get _model_path()
-# This function gets the absolute path to the pre-trained model “fish_model.pth”,
-# used to load model without hardcoding path multiple times
-#
-
 
 def get_model_path():
+    """
+    get _model_path()
+    This function gets the absolute path to the pre-trained model “fish_model.pth”,
+    used to load model without hardcoding path multiple times
+    """
     script_dir = os.path.dirname(os.path.abspath(__file__))  # Current Directory
     path_to_model = os.path.join(script_dir, "fish_model.pth")  # Adjust Path
     # model_load_path = "./fish_model.pth"
     return path_to_model
 
-#
-# load_model()
-# This function loads the pre-trained model and adjust it for our dataset and prepares it for evaluation
-#
-
 
 def load_model():
+    """
+    load_model()
+    This function loads the pre-trained model and adjust it for our dataset and prepares it for evaluation
+    """
     # pre-trained model for image recognition
     DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
     model_load_path = get_model_path()
@@ -53,10 +50,15 @@ def load_model():
 
 
 dataset = load_dataset()
-normalizer = Normalize(mean=[.485, .456, .406], std=[.229, .224, .225])  # avg of all images RGB
+"""calls load_dataset()"""
+normalizer = Normalize(mean=[.485, .456, .406], std=[.229, .224, .225])
+"""avg of all images RGB"""
+
 
 model = load_model()
+"""Loads ResNet-18 model pre-trained on ImageNet"""
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+"""Specifies whether computations will be performed by GPU or CPU"""
 
 # Changes images to all be one size
 val_transforms = Compose([
@@ -64,14 +66,14 @@ val_transforms = Compose([
     ToTensor(),
     normalizer
 ])
-
-#
-# prediction()
-# The predict function uses the trained model and a user input fish and makes a guess on fish’s species.
-#
+"""Changes images to all be one size"""
 
 
 def prediction(image_path):
+    """
+    prediction()
+    The predict function uses the trained model and a user input fish and makes a guess on fish’s species.
+    """
     image = Image.open(image_path).convert('RGB')
     image = val_transforms(image).unsqueeze(0)
     image = image.to(DEVICE)

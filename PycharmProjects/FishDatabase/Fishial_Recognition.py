@@ -1,7 +1,7 @@
-'''
+"""
 followed this video for image recognition:
 https://www.youtube.com/watch?v=QyN_1ep1J1E&t=22s
-'''
+"""
 import torch
 import torch.nn as nn
 from torch import optim
@@ -14,36 +14,42 @@ from tqdm import tqdm
 
 
 Path_to_data = "./fish_dataset"
+"""Specifies file path to dataset of fish images"""
 dataset = ImageFolder(Path_to_data)
-normalizer = Normalize(mean=[.485, .456, .406], std=[.229, .224, .225])  # avg of all images RGB
+"""creates an ImageFolder object that automatically labels images based on folder"""
+normalizer = Normalize(mean=[.485, .456, .406], std=[.229, .224, .225])
+"""avg of all images RGB"""
 
-# Changes images to all be one size
+
 train_transforms = Compose([
     Resize((224, 224)),
     RandomHorizontalFlip(),
     ToTensor(),
     normalizer
 ])
+"""Changes images to all be one size"""
 
-# Changes images to all be one size
 val_transforms = Compose([
     Resize((224, 224)),
     ToTensor(),
     normalizer
 ])
+"""Changes images to all be one size"""
 
-# splits data into train and validate sizes
 train_samples, test_samples = int(.7 * len(dataset)), len(dataset) - int(.7 * len(dataset))
-# takes both samples and randomly sorts them
+"""splits data into train and validate sizes"""
 train_dataset, val_dataset = torch.utils.data.random_split(dataset, lengths=[train_samples, test_samples])
-# makes sure each image is transformed to preset
+"""takes both samples and randomly sorts them"""
 train_dataset.dataset.transform = train_transforms
+"""makes sure each image is transformed to preset"""
 val_dataset.dataset.transform = val_transforms
 
 
 # pre-trained model for image recognition
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+"""Specifies whether computations will be performed by GPU or CPU"""
 model = resnet18(weights=ResNet18_Weights.DEFAULT)
+"""Loads ResNet-18 model pre-trained on ImageNet"""
 model.fc = nn.Linear(in_features=512, out_features=36)
 model = model.to(DEVICE)
 
@@ -51,25 +57,28 @@ for name, param in model.named_parameters():
     if 'fc' not in name:
         param.requires_grad_(False)
 
-# summary(model, input_size=(3, 224, 224))
 
 # Training inputs
 optimizer = optim.AdamW(params=model.parameters())
+"""The AdamW optimizer updates the models weights during training"""
 loss_fn = nn.CrossEntropyLoss()
+"""Used to measure the difference between models prediction and true label"""
 batch_size = 128
+"""group size of images processed together"""
 
 # data loaders
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+"""A data loader that shuffles and batches the training dataset"""
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
-
-#
-# Train()
-# The train function is used to train and validate the model over a
-# specified amount of epochs using both the training and validation data.
-#
+"""A data loader that shuffles and batches the validation dataset"""
 
 
 def train(model, device, epochs, optimizer, loss_fn, batch_size, trainloader, valloader):
+    """
+    Train()
+    The train function is used to train and validate the model over a
+    specified amount of epochs using both the training and validation data.
+    """
     log_training = {'epochs': [],
                     'training loss': [],
                     'training accuracy': [],
